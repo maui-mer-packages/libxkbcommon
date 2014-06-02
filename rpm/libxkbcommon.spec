@@ -23,6 +23,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires:  pkgconfig(xorg-macros) >= 1.16
 BuildRequires:  pkgconfig(xcb-xkb)
+BuildRequires:  pkgconfig(xkeyboard-config)
 BuildRequires:  libtool
 BuildRequires:  bison
 

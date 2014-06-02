@@ -16,6 +16,7 @@ Sources:
 PkgConfigBR:
     - xorg-macros >= 1.16
     - xcb-xkb
+    - xkeyboard-config
 PkgBR:
     - libtool
     - bison
