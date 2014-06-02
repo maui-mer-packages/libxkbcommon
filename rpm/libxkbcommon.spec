@@ -6,6 +6,14 @@
 Name:       libxkbcommon
 
 # >> macros
+# Conditional building of X11 related things
+%bcond_with X11
+
+%if %{with X11}
+%global x11 --enable-x11
+%else
+%global x11 --disable-x11
+%endif
 # << macros
 
 Summary:    Xorg X11 common xkb library
@@ -20,6 +28,7 @@ Requires:   xorg-x11-filesystem
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires:  pkgconfig(xorg-macros) >= 1.16
+BuildRequires:  pkgconfig(xcb-xkb)
 BuildRequires:  libtool
 BuildRequires:  bison
 
@@ -48,7 +57,7 @@ xkb development libraries.
 
 %reconfigure --disable-static \
     --with-xkb-config-root=/usr/share/X11/xkb \
-    --disable-x11
+    %{?x11}
 
 make %{?_smp_mflags}
 
@@ -73,6 +82,10 @@ rm -rf %{buildroot}
 %{_libdir}/libxkbcommon.so.0
 %{_libdir}/libxkbcommon.so.0.0.0
 # >> files
+%if %{with X11}
+%{_libdir}/libxkbcommon-x11.so.0
+%{_libdir}/libxkbcommon-x11.so.0.0.0
+%endif
 # << files
 
 %files devel
@@ -84,4 +97,9 @@ rm -rf %{buildroot}
 %{_libdir}/libxkbcommon.so
 %{_libdir}/pkgconfig/xkbcommon.pc
 # >> files devel
+%if %{with X11}
+%{_includedir}/xkbcommon/xkbcommon-x11.h
+%{_libdir}/libxkbcommon-x11.so
+%{_libdir}/pkgconfig/xkbcommon-x11.pc
+%endif
 # << files devel

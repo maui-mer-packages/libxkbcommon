@@ -14,6 +14,7 @@ Sources:
 
 PkgConfigBR:
     - xorg-macros >= 1.16
+    - xcb-xkb
 PkgBR:
     - libtool
     - bison
@@ -24,7 +25,7 @@ Requires:
 Configure: reconfigure
 ConfigOptions:
     - --with-xkb-config-root=/usr/share/X11/xkb
-    - --disable-x11
+    - "%{?x11}"
 
 Files:
     - "%{_libdir}/libxkbcommon.so.0"
