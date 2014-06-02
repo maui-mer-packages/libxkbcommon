@@ -1,0 +1,45 @@
+Name       : libxkbcommon
+Summary    : Xorg X11 common xkb library
+Description: |
+  Xorg X11 common xkb library
+Version    : 0.4.2
+Release    : 1
+Group      : System/Libraries
+License    : MIT
+URL        : https://github.com/xkbcommon/libxkbcommon.git
+SetupOptions: -q -n %{name}-%{version}/upstream
+
+Sources:
+    - "%{name}-%{version}.tar.xz"
+
+PkgConfigBR:
+    - xorg-macros >= 1.16
+PkgBR:
+    - libtool
+    - bison
+
+Requires:
+    - xorg-x11-filesystem
+
+Configure: reconfigure
+ConfigOptions:
+    - --with-xkb-config-root=/usr/share/X11/xkb
+    - --disable-x11
+
+Files:
+    - "%{_libdir}/libxkbcommon.so.0"
+    - "%{_libdir}/libxkbcommon.so.0.0.0"
+
+SubPackages:
+    - Name: devel
+      Summary: Xorg X11 common xkb libray
+      Description: |
+        xkb development libraries.
+      Group: Development/Libraries
+      Files:
+          - "%{_includedir}/xkbcommon/xkbcommon.h"
+          - "%{_includedir}/xkbcommon/xkbcommon-names.h"
+          - "%{_includedir}/xkbcommon/xkbcommon-keysyms.h"
+          - "%{_includedir}/xkbcommon/xkbcommon-compat.h"
+          - "%{_libdir}/libxkbcommon.so"
+          - "%{_libdir}/pkgconfig/xkbcommon.pc"
