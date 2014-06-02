@@ -8,15 +8,9 @@ Name:       libxkbcommon
 # >> macros
 # Conditional building of X11 related things
 %bcond_with X11
-
-%if %{with X11}
-%global x11 --enable-x11
-%else
-%global x11 --disable-x11
-%endif
 # << macros
 
-Summary:    Xorg X11 common xkb library
+Summary:    X.Org X11 XKB parsing library
 Version:    0.4.2
 Release:    1
 Group:      System/Libraries
@@ -33,16 +27,34 @@ BuildRequires:  libtool
 BuildRequires:  bison
 
 %description
-Xorg X11 common xkb library
+%{name} is the X.Org library for compiling XKB maps into formats usable by
+the X Server or other display servers.
 
 
 %package devel
-Summary:    Xorg X11 common xkb libray
+Summary:    X.Org X11 XKB parsing development package
 Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
-xkb development libraries.
+X.Org X11 XKB parsing development package.
+
+%if %{with X11}
+%package x11
+Summary:        X.Org X11 XKB keymap creation library
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description x11
+%{name}-x11 is the X.Org library for creating keymaps by querying the X
+server.
+
+%package x11-devel
+Summary:        X.Org X11 XKB keymap creation library
+Requires:       %{name}-x11%{?_isa} = %{version}-%{release}
+
+%description x11-devel
+X.Org X11 XKB keymap creation library development package
+%endif
 
 
 %prep
@@ -56,8 +68,13 @@ xkb development libraries.
 # << build pre
 
 %reconfigure --disable-static \
+    --disable-silent-rules \
     --with-xkb-config-root=/usr/share/X11/xkb \
-    %{?x11}
+%if %{with X11}
+    --enable-x11
+%else
+    --disable-x11
+%endif
 
 make %{?_smp_mflags}
 
@@ -79,13 +96,10 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%doc COPYING
 %{_libdir}/libxkbcommon.so.0
 %{_libdir}/libxkbcommon.so.0.0.0
 # >> files
-%if %{with X11}
-%{_libdir}/libxkbcommon-x11.so.0
-%{_libdir}/libxkbcommon-x11.so.0.0.0
-%endif
 # << files
 
 %files devel
@@ -97,9 +111,19 @@ rm -rf %{buildroot}
 %{_libdir}/libxkbcommon.so
 %{_libdir}/pkgconfig/xkbcommon.pc
 # >> files devel
+# << files devel
+
 %if %{with X11}
+%post x11 -p /sbin/ldconfig
+%postun x11 -p /sbin/ldconfig
+
+%files x11
+%defattr(-,root,root,-)
+%{_libdir}/libxkbcommon-x11.so.0
+%{_libdir}/libxkbcommon-x11.so.0.0.0
+
+%files x11-devel
 %{_includedir}/xkbcommon/xkbcommon-x11.h
 %{_libdir}/libxkbcommon-x11.so
 %{_libdir}/pkgconfig/xkbcommon-x11.pc
 %endif
-# << files devel

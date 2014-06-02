@@ -1,12 +1,13 @@
-Name       : libxkbcommon
-Summary    : Xorg X11 common xkb library
-Description: |
-  Xorg X11 common xkb library
-Version    : 0.4.2
-Release    : 1
-Group      : System/Libraries
-License    : MIT
-URL        : https://github.com/xkbcommon/libxkbcommon.git
+Name        : libxkbcommon
+Summary     : X.Org X11 XKB parsing library
+Description : |
+  %{name} is the X.Org library for compiling XKB maps into formats usable by
+  the X Server or other display servers.
+Version     : 0.4.2
+Release     : 1
+Group       : System/Libraries
+License     : MIT
+URL         : https://github.com/xkbcommon/libxkbcommon.git
 SetupOptions: -q -n %{name}-%{version}/upstream
 
 Sources:
@@ -24,18 +25,19 @@ Requires:
 
 Configure: reconfigure
 ConfigOptions:
+    - --disable-silent-rules
     - --with-xkb-config-root=/usr/share/X11/xkb
-    - "%{?x11}"
 
 Files:
+    - "%doc COPYING"
     - "%{_libdir}/libxkbcommon.so.0"
     - "%{_libdir}/libxkbcommon.so.0.0.0"
 
 SubPackages:
     - Name: devel
-      Summary: Xorg X11 common xkb libray
+      Summary: X.Org X11 XKB parsing development package
       Description: |
-        xkb development libraries.
+        X.Org X11 XKB parsing development package.
       Group: Development/Libraries
       Files:
           - "%{_includedir}/xkbcommon/xkbcommon.h"
